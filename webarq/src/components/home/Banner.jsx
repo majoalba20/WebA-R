@@ -1,5 +1,5 @@
-import './App.css'
-import banner from './assets/fachada .jpeg'
+import './../../App.css'
+import banner from './../../assets/images/fachada .jpeg'
 
 function Banner() {
     return(

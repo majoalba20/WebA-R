@@ -1,6 +1,6 @@
-import './App.css'
+import './../../App.css'
 import { useState } from "react";
-import logo from './assets/logo2-removebg.png'
+import logo from './../../assets/images/logo2-removebg.png'
 
 function Navbar() {
     // Estado para abrir/cerrar el menú en móvil
