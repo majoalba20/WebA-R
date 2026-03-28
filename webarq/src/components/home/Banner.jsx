@@ -7,7 +7,7 @@ function Banner() {
         {/* 
             relative: Permite que el texto absoluto se posicione respecto al banner.
         */}
-        <div className='relative text-center text-white'>
+        <section id='banner' className='relative text-center text-white'>
             {/* 
                 h-screen: Hace que el banner ocupe toda la altura de la pantalla.
                 object-cover: Hace que la imagen se vea mejor como “hero section”.
@@ -27,7 +27,7 @@ function Banner() {
                     Conoce más
                 </button>
             </div>
-        </div>
+        </section>
         </>
     )
 }
