@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Cocinas",
+    "image": "/images/fachada .jpeg",
+    "description": "Diseños modernos, funcionales y elegantes para transformar tus espacios."
+  },
+  {
+    "title": "Baños",
+    "image": "/images/fachada .jpeg",
+    "description": "Espacios cómodos, sofisticados y bien aprovechados para tu bienestar diario."
+  },
+  {
+    "title": "Muebles",
+    "image": "/images/fachada .jpeg",
+    "description": "Mobiliario a medida con estilo, calidad y funcionalidad para cada ambiente."
+  },
+  {
+    "title": "Exteriores",
+    "image": "/images/fachada .jpeg",
+    "description": "Propuestas únicas para terrazas, jardines y espacios al aire libre con personalidad."
+  }
+]
