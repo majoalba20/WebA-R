@@ -1,7 +1,19 @@
 import Card from '../layout/Card'
 import projects from '../../data/projects.json'
+import Modal from '../layout/Modal'
+import { useState } from "react";
 
 function Renovations() {
+    const [selectedProject, setSelectedProject] = useState(null);
+
+    const handleOpenModal = (project) => {
+        setSelectedProject(project);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedProject(null);
+    };
+
     return (
         <section
             id="renovations"
@@ -14,10 +26,18 @@ function Renovations() {
                         image={p.image}
                         title={p.title}
                         desc={p.description}
+                        onViewMore={() => handleOpenModal(p)}
                     />
                 ))}
             </div>
+            {selectedProject && (
+                <Modal
+                    project={selectedProject}
+                    onClose={handleCloseModal}
+                />
+            )}
         </section>
+
     )
 }
 

@@ -1,4 +1,4 @@
-function Card({image, title, desc}) {
+function Card({image, title, desc, onViewMore}) {
   return (
     <div className="group w-[280px] overflow-hidden rounded-3xl bg-white shadow-md transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
       <div className="relative h-[220px] w-full overflow-hidden">
@@ -23,7 +23,9 @@ function Card({image, title, desc}) {
             {desc}
         </p>
 
-        <button className="mt-4 rounded-xl bg-customBlue px-4 py-2 text-sm font-semibold text-white transition hover:bg-customDarkGray font-montserrat">
+        <button className="mt-4 rounded-xl bg-customBlue px-4 py-2 text-sm font-semibold text-white transition hover:bg-customDarkGray font-montserrat"
+            onClick={onViewMore}
+        >
           Ver más
         </button>
       </div>
