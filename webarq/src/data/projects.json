@@ -1,42 +1,32 @@
 [
   {
     "title": "Cocinas",
-    "image": "/images/fachada .jpeg",
+    "image": "/images/Cocinas/cocina1.jpeg",
     "description": "Diseños modernos, funcionales y elegantes para transformar tus espacios.",
     "images": [
-      "/images/antes 1 .jpeg",
-      "/images/antes 2.jpeg",
-      "/images/antes 3.jpeg"
-    ]
-  },
-  {
-    "title": "Baños",
-    "image": "/images/fachada .jpeg",
-    "description": "Espacios cómodos, sofisticados y bien aprovechados para tu bienestar diario.",
-    "images": [
-      "/images/antes 1 .jpeg",
-      "/images/antes 2.jpeg",
-      "/images/antes 3.jpeg"
+      "/images/Cocinas/cocina1.jpeg",
+      "/images/Cocinas/cocina2.jpeg",
+      "/images/Cocinas/cocina3.jpeg",
+      "/images/Cocinas/cocina4.jpeg"
     ]
   },
   {
     "title": "Muebles",
-    "image": "/images/fachada .jpeg",
+    "image": "/images/Muebles/mueble1.jpeg",
     "description": "Mobiliario a medida con estilo, calidad y funcionalidad para cada ambiente.",
     "images": [
-      "/images/antes 1 .jpeg",
-      "/images/antes 2.jpeg",
-      "/images/antes 3.jpeg"
+      "/images/Muebles/mueble1.jpeg",
+      "/images/Muebles/mueble2.jpeg",
+      "/images/Muebles/mueble3.jpeg",
+      "/images/Muebles/mueble4.jpeg"
     ]
   },
   {
     "title": "Exteriores",
-    "image": "/images/fachada .jpeg",
+    "image": "/images/Exteriores/exterior1.jpeg",
     "description": "Propuestas únicas para espacios al aire libre con personalidad.",
     "images": [
-      "/images/antes 1 .jpeg",
-      "/images/antes 2.jpeg",
-      "/images/antes 3.jpeg"
+      "/images/Exteriores/exterior1.jpeg"
     ]
   }
 ]
