@@ -7,7 +7,7 @@ const About = () => {
   return (
     <section
       id="about"
-      className="relative bg-white pt-20 md:pt-32 pb-12 md:pb-16 font-montserrat overflow-hidden select-none"
+      className="relative bg-white pt-20 md:pt-32 pb-10 md:pb-14 font-montserrat overflow-hidden select-none"
     >
       {/* Elemento Decorativo Arquitectónico de Fondo */}
       <div className="absolute top-12 right-0 text-[18vw] font-extralight text-neutral-100 leading-none pointer-events-none select-none z-0">

@@ -31,7 +31,7 @@ const Reviews = () => {
   return (
     <section 
       id="reviews"
-      className="relative bg-white pt-12 md:pt-16 pb-20 md:pb-32 font-montserrat overflow-hidden select-none"
+      className="relative bg-white pt-10 md:pt-14 pb-20 md:pb-32 font-montserrat overflow-hidden select-none"
     >
       {/* Elemento Decorativo Tipográfico de Fondo */}
       <div className="absolute bottom-0 left-0 text-[18vw] font-extralight text-neutral-100/70 leading-none pointer-events-none select-none z-0 translate-y-1/3">
