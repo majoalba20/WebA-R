@@ -1,31 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // Importamos la constante con las imágenes importadas desde src/assets/renovations/
 import { RENOVATIONS_DATA } from '../../data/renovations.js';
 
-// --- MODAL PREMIUM CON FLUIDEZ DE IMAGEN Y FONDO ATMOSFÉRICO ---
+// --- MODAL PREMIUM CON FLUIDEZ DE IMAGEN Y PRECARGA ---
 function Modal({ project, onClose }) {
   const [index, setIndex] = useState(0);
-
-  if (!project) return null;
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Garantizar array de imágenes estables
-  const projectImages = project.images && project.images.length > 0 
+  const projectImages = project?.images && project.images.length > 0 
     ? project.images 
-    : [project.image];
+    : (project?.image ? [project.image] : []);
+
+  // Pre-cargar imágenes vecinas para que el cambio sea ultra fluido
+  useEffect(() => {
+    if (!projectImages.length) return;
+
+    // Pre-cargar siguiente imagen
+    const nextIdx = (index + 1) % projectImages.length;
+    const nextImg = new Image();
+    nextImg.src = projectImages[nextIdx];
+
+    // Pre-cargar imagen anterior
+    const prevIdx = (index - 1 + projectImages.length) % projectImages.length;
+    const prevImg = new Image();
+    prevImg.src = projectImages[prevIdx];
+  }, [index, projectImages]);
+
+  // Manejo de teclas (Esc para cerrar, flechas para navegar)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowRight') handleNextImage();
+      if (e.key === 'ArrowLeft') handlePreviousImage();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [index, projectImages]);
+
+  if (!project) return null;
 
   const currentImage = projectImages[index];
 
   const handleNextImage = () => {
+    setIsLoaded(false);
     setIndex((prevIndex) => (prevIndex + 1) % projectImages.length);
   };
 
   const handlePreviousImage = () => {
+    setIsLoaded(false);
     setIndex((prevIndex) => (prevIndex - 1 + projectImages.length) % projectImages.length);
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-fadeIn font-montserrat select-none">
-      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">            
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-fadeIn font-montserrat select-none">
+      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"> 
+        
         {/* Cabecera del Modal */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-white z-20 shrink-0">
           <div>
@@ -47,21 +78,24 @@ function Modal({ project, onClose }) {
           </button>
         </div>
         {/* Visor de Galería: Fondo Difuminado Premium */}
-        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[320px] overflow-hidden">          
+        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-hidden">    
           {/* Fondo Atmosférico (Replica la imagen con desenfoque suave) */}
           <div 
-            className="absolute inset-0 bg-cover bg-center blur-3xl opacity-35 scale-125 transition-all duration-700 ease-in-out pointer-events-none"
+            className="absolute inset-0 bg-cover bg-center blur-3xl opacity-30 scale-125 transition-all duration-500 ease-out pointer-events-none"
             style={{ backgroundImage: `url(${currentImage})` }}
-          />        
+          />       
           {/* Capa de contraste sofisticado */}
           <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />          
-          
           {/* Contenedor de Imagen Central */}
           <div className="relative z-10 w-full h-full flex items-center justify-center max-h-[60vh]">
             <img
+              key={currentImage} // Obliga a React a refrescar la transición de la imagen
               src={currentImage}
               alt={`${project.title} - ${index + 1}`}
-              className="max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-opacity duration-300"
+              onLoad={() => setIsLoaded(true)}
+              className={`max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-all duration-500 ${
+                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
             />
           </div>
           {/* Flechas de Navegación Flotantes */}
@@ -102,7 +136,10 @@ function Modal({ project, onClose }) {
               {projectImages.map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setIndex(i)}
+                  onClick={() => {
+                    setIsLoaded(false);
+                    setIndex(i);
+                  }}
                   className={`h-1.5 transition-all duration-300 rounded-full ${
                     i === index ? 'w-8 bg-customBlue' : 'w-2 bg-neutral-200 hover:bg-neutral-300'
                   }`}
@@ -131,13 +168,13 @@ export default function Renovations() {
   return (
     <section
       id="renovations"
-      className="relative bg-white pt-10 md:pt-14 pb-10 md:pb-14 font-montserrat overflow-hidden select-none"
+      className="relative bg-white pt-10 md:pt-14 pb-10 md:pb-14 font-montserrat overflow-hidden select-none scroll-mt-20 sm:scroll-mt-24"
     >
       {/* Tipografía Decorativa de Fondo */}
       <div className="absolute top-1/4 -left-12 text-[18vw] font-extralight text-neutral-100/80 leading-none pointer-events-none select-none z-0">
         REFORMAS
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">      
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">     
         {/* Encabezado Editorial */}
         <div className="mb-14 md:mb-16 border-b border-neutral-100 pb-10">
           <div className="flex items-center gap-3 mb-4">
@@ -174,9 +211,9 @@ export default function Renovations() {
                   className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
                 />
                 {/* Overlays Progresivos */}
-                <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />                
                 {/* Info Flotante */}
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                  
+                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                   
                   {/* Badge Superior */}
                   <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="text-[10px] uppercase tracking-[3px] text-white/90 bg-customBlack/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
@@ -206,8 +243,14 @@ export default function Renovations() {
           })}
         </div>
       </div>
-      {/* Modal Integrado */}
-      <Modal project={selectedProject} onClose={() => setSelectedProject(null)} />
+      {/* Modal Integrado - Pasamos key para forzar la reinicialización del estado 'index' a 0 */}
+      {selectedProject && (
+        <Modal 
+          key={selectedProject.id || selectedProject.title} 
+          project={selectedProject} 
+          onClose={() => setSelectedProject(null)} 
+        />
+      )}
     </section>
   );
 }
