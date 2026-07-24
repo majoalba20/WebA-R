@@ -1,5 +1,5 @@
 import './../../App.css'
-import banner from './../../assets/images/house_desing_day_banner.jpeg'
+import banner from './../../assets/banner/house_desing_day_banner.jpeg'
 
 function Banner() {
     return(

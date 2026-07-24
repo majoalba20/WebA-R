@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import projectsData from '../../data/renovations.json';
+// Importamos la constante con las imágenes importadas desde src/assets/renovations/
+import { RENOVATIONS_DATA } from '../../data/renovations.js';
 
 // --- MODAL PREMIUM CON FLUIDEZ DE IMAGEN Y FONDO ATMOSFÉRICO ---
 function Modal({ project, onClose }) {
@@ -7,7 +8,7 @@ function Modal({ project, onClose }) {
 
   if (!project) return null;
 
-  // Garantizar array de imágenes
+  // Garantizar array de imágenes estables
   const projectImages = project.images && project.images.length > 0 
     ? project.images 
     : [project.image];
@@ -24,7 +25,7 @@ function Modal({ project, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-fadeIn font-montserrat select-none">
-      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">     
+      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">            
         {/* Cabecera del Modal */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-white z-20 shrink-0">
           <div>
@@ -51,10 +52,11 @@ function Modal({ project, onClose }) {
           <div 
             className="absolute inset-0 bg-cover bg-center blur-3xl opacity-35 scale-125 transition-all duration-700 ease-in-out pointer-events-none"
             style={{ backgroundImage: `url(${currentImage})` }}
-          />
+          />        
           {/* Capa de contraste sofisticado */}
           <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />          
-          {/* Contenedor de Imagen Central sin Titileo */}
+          
+          {/* Contenedor de Imagen Central */}
           <div className="relative z-10 w-full h-full flex items-center justify-center max-h-[60vh]">
             <img
               src={currentImage}
@@ -135,7 +137,7 @@ export default function Renovations() {
       <div className="absolute top-1/4 -left-12 text-[18vw] font-extralight text-neutral-100/80 leading-none pointer-events-none select-none z-0">
         REFORMAS
       </div>
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">       
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">      
         {/* Encabezado Editorial */}
         <div className="mb-14 md:mb-16 border-b border-neutral-100 pb-10">
           <div className="flex items-center gap-3 mb-4">
@@ -153,9 +155,9 @@ export default function Renovations() {
             </p>
           </div>
         </div>
-        {/* Bento Grid Pro: Manteniendo Proporciones Correctas */}
+        {/* Bento Grid Pro */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[280px] md:auto-rows-[320px]">
-          {projectsData.map((project, index) => {
+          {RENOVATIONS_DATA.map((project, index) => {
             const isLarge = index === 0;
             return (
               <div
@@ -172,7 +174,7 @@ export default function Renovations() {
                   className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
                 />
                 {/* Overlays Progresivos */}
-                <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />
                 {/* Info Flotante */}
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                  
                   {/* Badge Superior */}
