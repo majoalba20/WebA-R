@@ -1,5 +1,6 @@
 import "../App.css"
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import Banner from "../components/home/Banner";
 import BeforeAfter from "../components/home/BeforeAfter";
 import Renovations from "../components/home/Renovations";
@@ -21,6 +22,7 @@ function Home() {
         <About/>
         <Reviews/>
       </main>
+      <Footer/>
     </>
   );
 }

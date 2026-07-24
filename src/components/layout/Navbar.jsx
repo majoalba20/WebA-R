@@ -31,7 +31,15 @@ function Navbar() {
         
         const targetElement = document.querySelector(href);
         if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+            // Altura del Navbar fija + margen de respiración
+            const navbarHeight = 60; 
+            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
+            const offsetPosition = elementPosition - navbarHeight;
+
+            window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+            });
         }
     };
 
