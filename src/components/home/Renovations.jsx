@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import projectsData from '../../data/projects.json';
+import projectsData from '../../data/renovations.json';
 
 // --- MODAL PREMIUM CON FLUIDEZ DE IMAGEN Y FONDO ATMOSFÉRICO ---
 function Modal({ project, onClose }) {
@@ -24,8 +24,7 @@ function Modal({ project, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-2 sm:p-4 md:p-6 animate-fadeIn font-montserrat select-none">
-      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
-        
+      <div className="relative w-full max-w-5xl bg-white rounded-sm border border-neutral-800/20 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">     
         {/* Cabecera del Modal */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100 bg-white z-20 shrink-0">
           <div>
@@ -36,7 +35,6 @@ function Modal({ project, onClose }) {
               {project.title}
             </h3>
           </div>
-
           <button
             onClick={onClose}
             className="p-2.5 text-customDarkerGray hover:text-customBlack bg-neutral-100 hover:bg-neutral-200 rounded-full transition-all duration-300 flex items-center justify-center"
@@ -47,19 +45,15 @@ function Modal({ project, onClose }) {
             </svg>
           </button>
         </div>
-
         {/* Visor de Galería: Fondo Difuminado Premium */}
-        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[320px] overflow-hidden">
-          
+        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[320px] overflow-hidden">          
           {/* Fondo Atmosférico (Replica la imagen con desenfoque suave) */}
           <div 
             className="absolute inset-0 bg-cover bg-center blur-3xl opacity-35 scale-125 transition-all duration-700 ease-in-out pointer-events-none"
             style={{ backgroundImage: `url(${currentImage})` }}
           />
-
           {/* Capa de contraste sofisticado */}
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />
-          
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />          
           {/* Contenedor de Imagen Central sin Titileo */}
           <div className="relative z-10 w-full h-full flex items-center justify-center max-h-[60vh]">
             <img
@@ -68,7 +62,6 @@ function Modal({ project, onClose }) {
               className="max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-opacity duration-300"
             />
           </div>
-
           {/* Flechas de Navegación Flotantes */}
           {projectImages.length > 1 && (
             <>
@@ -81,7 +74,6 @@ function Modal({ project, onClose }) {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-
               <button
                 onClick={handleNextImage}
                 className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-neutral-900/60 hover:bg-white text-white hover:text-customBlack border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-300 shadow-2xl z-20"
@@ -93,7 +85,6 @@ function Modal({ project, onClose }) {
               </button>
             </>
           )}
-
           {/* Tag de Posición */}
           {projectImages.length > 1 && (
             <div className="absolute bottom-4 right-4 bg-neutral-900/80 backdrop-blur-md text-white border border-white/10 px-3.5 py-1 rounded-full text-[11px] font-light tracking-widest z-20">
@@ -101,7 +92,6 @@ function Modal({ project, onClose }) {
             </div>
           )}
         </div>
-
         {/* Info & Detalles Inferiores */}
         <div className="p-5 md:p-6 bg-white border-t border-neutral-100 overflow-y-auto shrink-0 z-20">
           {/* Indicadores de Galería */}
@@ -119,7 +109,6 @@ function Modal({ project, onClose }) {
               ))}
             </div>
           )}
-
           <div className="max-w-3xl">
             <span className="text-xs font-semibold uppercase tracking-[2px] text-customBlue block mb-1">
               Descripción del Espacio
@@ -129,7 +118,6 @@ function Modal({ project, onClose }) {
             </p>
           </div>
         </div>
-
       </div>
     </div>
   );
@@ -138,7 +126,6 @@ function Modal({ project, onClose }) {
 // --- COMPONENTE PRINCIPAL RENOVATIONS ---
 export default function Renovations() {
   const [selectedProject, setSelectedProject] = useState(null);
-
   return (
     <section
       id="renovations"
@@ -148,9 +135,7 @@ export default function Renovations() {
       <div className="absolute top-1/4 -left-12 text-[18vw] font-extralight text-neutral-100/80 leading-none pointer-events-none select-none z-0">
         REFORMAS
       </div>
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
-        
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">       
         {/* Encabezado Editorial */}
         <div className="mb-14 md:mb-16 border-b border-neutral-100 pb-10">
           <div className="flex items-center gap-3 mb-4">
@@ -168,12 +153,10 @@ export default function Renovations() {
             </p>
           </div>
         </div>
-
         {/* Bento Grid Pro: Manteniendo Proporciones Correctas */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[280px] md:auto-rows-[320px]">
           {projectsData.map((project, index) => {
             const isLarge = index === 0;
-
             return (
               <div
                 key={project.id || index}
@@ -188,13 +171,10 @@ export default function Renovations() {
                   alt={project.title}
                   className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
                 />
-
                 {/* Overlays Progresivos */}
                 <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500"></div>
-
                 {/* Info Flotante */}
-                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">
-                  
+                <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                  
                   {/* Badge Superior */}
                   <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="text-[10px] uppercase tracking-[3px] text-white/90 bg-customBlack/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
@@ -206,7 +186,6 @@ export default function Renovations() {
                       </svg>
                     </div>
                   </div>
-
                   {/* Textos */}
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-[2px] text-customBlue block mb-1">
@@ -219,15 +198,12 @@ export default function Renovations() {
                       {project.description}
                     </p>
                   </div>
-
                 </div>
               </div>
             );
           })}
         </div>
-
       </div>
-
       {/* Modal Integrado */}
       <Modal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>

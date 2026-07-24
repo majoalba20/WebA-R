@@ -2,7 +2,7 @@ import React, { useState, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, useGLTF, Stage, Center, ContactShadows } from '@react-three/drei';
 import { Search, X, RotateCw, Box, Layers } from 'lucide-react';
-import { PROJECTS } from './projects';
+import { PROJECTS } from '../../data/models3D.js'
 
 // Componente para cargar el modelo GLB
 function Model({ url }) {
@@ -24,9 +24,7 @@ export default function Portfolio3D() {
       <div className="absolute top-1/3 -right-10 text-[20vw] font-extralight text-neutral-100/70 leading-none pointer-events-none select-none z-0">
         MODELADO
       </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
-        
         {/* Encabezado Elegante */}
         <div className="mb-14 md:mb-16 border-b border-neutral-100 pb-10">
           <div className="flex items-center gap-3 mb-4">
@@ -44,7 +42,6 @@ export default function Portfolio3D() {
             </p>
           </div>
         </div>
-
         {/* Grid de Proyectos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {PROJECTS.map((project) => (
@@ -59,8 +56,7 @@ export default function Portfolio3D() {
                   src={project.image}
                   alt={project.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter contrast-[1.02]"
-                />      
-                
+                />                    
                 {/* Overlay en Hover */}
                 <div className="absolute inset-0 bg-customBlack/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
                   <div className="flex items-center gap-2 bg-white text-customBlack px-5 py-2.5 rounded-full font-medium text-xs uppercase tracking-wider shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
@@ -68,14 +64,12 @@ export default function Portfolio3D() {
                     <span>Inspeccionar 3D</span>
                   </div>
                 </div>
-
                 {/* Badge 3D */}
                 <div className="absolute top-4 right-4 bg-customBlack/80 backdrop-blur-md text-white border border-white/10 px-3 py-1 rounded-full text-[11px] font-semibold flex items-center gap-1.5 shadow-sm">
                   <Box className="w-3.5 h-3.5 text-customBlue" />
                   <span>3D INTERACTIVO</span>
                 </div>
               </div>
-
               {/* Info del Proyecto */}
               <div className="p-6 bg-white border-t border-neutral-100">
                 <span className="text-xs font-semibold tracking-[2px] text-customBlue uppercase block mb-1">
@@ -91,7 +85,6 @@ export default function Portfolio3D() {
             </div>
           ))}
         </div>
-
         {/* Footer de Sección */}
         <div className="mt-12 pt-8 border-t border-neutral-100 flex items-center justify-between text-xs text-customDarkerGray font-light">
           <span className="flex items-center gap-2">
@@ -102,14 +95,11 @@ export default function Portfolio3D() {
             A+R Arquitectos Estudio
           </span>
         </div>
-
       </div>
-
       {/* Modal Visor 3D Interactivo (FONDO OSCURO RESTAURADO PARA EL MODELO) */}
       {selectedProject && (
         <div className="fixed inset-0 z-50 bg-customBlack/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-fadeIn">
-          <div className="relative w-full max-w-5xl h-[85vh] bg-customBlack rounded-sm border border-neutral-800 flex flex-col overflow-hidden shadow-2xl">
-            
+          <div className="relative w-full max-w-5xl h-[85vh] bg-customBlack rounded-sm border border-neutral-800 flex flex-col overflow-hidden shadow-2xl">           
             {/* Cabecera del Modal (Minimalista / Dark) */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-customBlack">
               <div>
@@ -128,7 +118,6 @@ export default function Portfolio3D() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-
             {/* Canvas de Three.js sobre customBlack */}
             <div className="relative flex-1 bg-customBlack">
               <Canvas shadows camera={{ position: [5, 5, 5], fov: 45 }}>
@@ -151,14 +140,12 @@ export default function Portfolio3D() {
                   maxPolarAngle={Math.PI / 2 + 0.1}
                 />
               </Canvas>
-
               {/* Guía de Control para el Usuario */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/60 text-neutral-200 px-5 py-2.5 rounded-full text-xs flex items-center gap-2.5 shadow-2xl pointer-events-none">
                 <RotateCw className="w-3.5 h-3.5 animate-spin text-customBlue" />
                 <span className="font-light tracking-wide">Arrastra para girar | Scroll para zoom</span>
               </div>
             </div>
-
           </div>
         </div>
       )}
