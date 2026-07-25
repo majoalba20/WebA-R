@@ -8,6 +8,7 @@ import About from "../components/home/About";
 import Reviews from "../components/home/Reviews";
 import Videos from "../components/home/VideoTimeline";
 import Portafolio3D from "../components/projects3D/Portfolio3D";
+import WhatsAppButton from "../components/home/WhatsAppButton";
 
 function Home() {
   return (
@@ -23,6 +24,7 @@ function Home() {
         <Reviews/>
       </main>
       <Footer/>
+      <WhatsAppButton />
     </>
   );
 }

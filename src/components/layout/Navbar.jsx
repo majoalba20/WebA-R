@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from './../../assets/utils/logo2-removebg.png';
+import { SITE_CONFIG, NAVIGATION_LINKS } from '../../constants/siteConfig';
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -13,17 +14,6 @@ function Navbar() {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
-
-    // Lista completa de secciones con "&" en lugar de "Y"
-    const navLinks = [
-        { name: 'Inicio', href: '#banner' },
-        { name: 'Antes & Después', href: '#beforeAndAfter' },
-        { name: 'Remodelaciones', href: '#renovations' },
-        { name: 'Modelos & Conceptos 3D', href: '#portfolio-3d' },
-        { name: 'Timelapse', href: '#timeline' },
-        { name: 'Nosotros', href: '#about' },
-        { name: 'Reseñas', href: '#reviews' },
-    ];
 
     const handleNavClick = (e, href) => {
         e.preventDefault();
@@ -69,7 +59,7 @@ function Navbar() {
             {/* NAVEGACIÓN DESKTOP */}
             <nav className="hidden lg:flex items-center gap-5 xl:gap-6">
             <ul className="flex items-center gap-4 xl:gap-6 text-[11px] xl:text-xs uppercase tracking-[1.5px] xl:tracking-[2px] font-medium text-neutral-300">
-                {navLinks.map((link) => (
+                {NAVIGATION_LINKS.map((link) => (
                 <li key={link.name}>
                     <a
                     href={link.href}
@@ -85,7 +75,7 @@ function Navbar() {
 
             {/* BOTÓN CONTACTO DIRECTO A WHATSAPP */}
             <a
-                href="https://www.whatsapp.com/"
+                href={SITE_CONFIG.socialLinks.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-customBlue hover:bg-white text-white hover:text-customBlack text-[11px] xl:text-xs uppercase tracking-[2px] font-medium rounded-sm transition-all duration-300 shadow-md whitespace-nowrap"
@@ -115,7 +105,7 @@ function Navbar() {
             }`}
         >
             <ul className="flex flex-col items-center gap-4 text-xs uppercase tracking-[2.5px] font-medium text-neutral-300 px-6">
-            {navLinks.map((link) => (
+            {NAVIGATION_LINKS.map((link) => (
                 <li key={link.name} className="w-full text-center">
                 <a
                     href={link.href}
@@ -128,7 +118,7 @@ function Navbar() {
             ))}
             <li className="pt-2 w-full px-6 text-center">
                 <a
-                href="https://www.whatsapp.com/"
+                href={SITE_CONFIG.socialLinks.whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
