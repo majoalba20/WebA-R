@@ -132,10 +132,9 @@ export default function Footer() {
                     Email
                     </span>
                     <a
-                    href="mailto:contacto@ararquitectos.com"
                     className="hover:text-customBlue transition-colors duration-300"
                     >
-                    contacto@ararquitectos.com
+                    { SITE_CONFIG.email }
                     </a>
                 </div>
                 <div className="pt-2">

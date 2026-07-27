@@ -3,7 +3,7 @@ const defaultWhatsappMessage = 'Hola A+R Arquitectos Studio, vi su página web y
 
 export const SITE_CONFIG = {
     name: 'A+R Arquitectos Studio',
-    email: 'contacto@ararquitectos.com',
+    email: 'ararquitectosestudio@outlook.es',
     socialLinks: {
         instagram: 'https://www.instagram.com/a.r_arquitectos?igsh=eXp6cjRnN2F4azg=',
         whatsappUrl: `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(defaultWhatsappMessage)}`

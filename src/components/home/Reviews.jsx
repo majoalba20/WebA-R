@@ -1,44 +1,115 @@
-import React, { useState } from "react";
-import { Quote, ArrowRight, CheckCircle2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Quote, ArrowRight, CheckCircle2, Star } from "lucide-react";
 
-const reviews = [
-  {
-    id: 0,
-    name: "Carlos Martínez",
-    role: "Cliente Residencial",
-    project: "Casa Vista Parques",
-    text: "El resultado superó completamente nuestras expectativas. La forma en que integraron la luz natural y los materiales nobles transformó por completo la dinámica de nuestro hogar.",
-  },
-  {
-    id: 1,
-    name: "Laura Gómez",
-    role: "Proyecto Comercial",
-    project: "Oficinas Nexus",
-    text: "Profesionalismo y atención al detalle en cada etapa del proyecto. El diseño final refleja exactamente la identidad y sofisticación que buscábamos para nuestra marca.",
-  },
-  {
-    id: 2,
-    name: "Andrés Ruiz",
-    role: "Remodelación Integral",
-    project: "Penthouse Chapinero",
-    text: "Un proceso extraordinariamente fluido y un resultado impecable. Se nota la amplia experiencia del equipo en la toma de decisiones técnicas y de interiorismo.",
-  },
-];
+// Helper para parsear CSV respetando comillas y saltos de línea dentro de los campos
+const parseCSV = (text) => {
+  const lines = [];
+  let row = [];
+  let current = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i];
+    const nextChar = text[i + 1];
+    if (char === '"') {
+      if (insideQuotes && nextChar === '"') {
+        current += '"';
+        i++;
+      } else {
+        insideQuotes = !insideQuotes;
+      }
+    } else if (char === "," && !insideQuotes) {
+      row.push(current.trim());
+      current = "";
+    } else if ((char === "\r" || char === "\n") && !insideQuotes) {
+      if (char === "\r" && nextChar === "\n") i++;
+      row.push(current.trim());
+      if (row.some((cell) => cell.length > 0)) lines.push(row);
+      row = [];
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  if (current || row.length > 0) {
+    row.push(current.trim());
+    lines.push(row);
+  }
+  return lines;
+};
 
 const Reviews = () => {
+  const [reviews, setReviews] = useState([]);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKypGYSbJB6MUyUPwEOSIdfaNPHu-Nv_pPbrf88SGYeOXaK90Xl32GFbXzKS3RyI_bJR0bzakKBmC4/pub?output=csv"
+        const response = await fetch(URL);
+        const csvText = await response.text();
+        console.log(csvText)
+        const parsedRows = parseCSV(csvText);
+        console.log(parsedRows)
+        if (parsedRows.length <= 1) {
+          setLoading(false);
+          return;
+        }
+        // Mapear encabezados en minúsculas
+        const headers = parsedRows[0].map((h) => h.toLowerCase());
+        const dataRows = parsedRows.slice(1).map((row, idx) => {
+          const rowObj = {};
+          headers.forEach((header, i) => {
+            rowObj[header] = row[i] || "";
+          });
+          // Extraer número de estrellas (por defecto 5 si no viene especificado)
+          const ratingNumber = parseInt(
+            rowObj["valoración"] || "5", 
+            10
+          );
+          return {
+            id: idx,
+            name: rowObj["nombre completo"],
+            role: rowObj["tipo de proyecto"],
+            project: "Cliente Verificado",
+            text: rowObj["comentarios"],
+            rating: isNaN(ratingNumber) ? 5 : Math.min(Math.max(ratingNumber, 1), 5),
+          };
+        });
+        console.log(dataRows)
+        // FILTRO AUTOMÁTICO: Solo reseñas con 4 o 5 estrellas y con comentario no vacío
+        const topReviews = dataRows.filter((item) => item.rating >= 4 && item.text.length > 0);
+        setReviews(topReviews);
+      } catch (error) {
+        console.error("Error al cargar las reseñas desde Google Sheets:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
   const activeReview = reviews[activeIndex];
+  if (loading) {
+    return (
+      <section className="bg-white py-24 text-center font-montserrat">
+        <span className="text-xs uppercase tracking-[4px] text-neutral-400 animate-pulse">
+          Cargando experiencias...
+        </span>
+      </section>
+    );
+  }
+  if (!reviews.length || !activeReview) {
+    return null;
+  }
   return (
     <section 
       id="reviews"
       className="relative bg-white pt-10 md:pt-14 pb-20 md:pb-32 font-montserrat overflow-hidden select-none"
     >
-      {/* Elemento Decorativo Tipográfico de Fondo */}
       <div className="absolute bottom-0 left-0 text-[18vw] font-extralight text-neutral-100/70 leading-none pointer-events-none select-none z-0 translate-y-1/3">
         TESTIMONIOS
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
-        {/* Header Elegante */}
         <div className="mb-20 flex flex-col md:flex-row md:items-end justify-between border-b border-neutral-100 pb-10">
           <div>
             <div className="flex items-center gap-3 mb-4">
@@ -56,19 +127,27 @@ const Reviews = () => {
             <span>Proyectos Entregados con Éxito</span>
           </div>
         </div>
-        {/* Layout Grid */}
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Columna Izquierda: Review Destacada Dinámica */}
+          {/* Columna Izquierda: Review Destacada */}
           <div className="lg:col-span-7 relative bg-neutral-50/60 border border-neutral-100 p-8 sm:p-12 md:p-14 rounded-sm flex flex-col justify-between min-h-[420px] transition-all duration-500">            
-            {/* Ícono de Comilla de Diseño */}
-            <div className="mb-8">
+            <div className="mb-8 flex items-center justify-between">
               <Quote className="w-12 h-12 text-customBlue/30 rotate-180" />
+              <div className="flex items-center gap-1">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i < activeReview.rating
+                        ? "text-amber-400 fill-amber-400"
+                        : "text-neutral-200 fill-neutral-100"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
-            {/* Texto del Testimonio Destacado */}
             <p className="text-xl sm:text-2xl md:text-3xl text-customBlack font-light leading-relaxed mb-10 tracking-tight">
               “{activeReview.text}”
             </p>
-            {/* Autor y Detalles del Proyecto */}
             <div className="flex items-center justify-between pt-8 border-t border-neutral-200/60">
               <div>
                 <h4 className="text-lg font-medium text-customBlack">
@@ -84,7 +163,6 @@ const Reviews = () => {
                   </span>
                 </div>
               </div>
-              {/* Indicadores de Selección (Dots) */}
               <div className="flex gap-2">
                 {reviews.map((_, idx) => (
                   <button
@@ -101,7 +179,7 @@ const Reviews = () => {
               </div>
             </div>
           </div>
-          {/* Columna Derecha: Tarjetas Secundarias Seleccionables */}
+          {/* Columna Derecha: Tarjetas Secundarias */}
           <div className="lg:col-span-5 flex flex-col gap-4">
             <span className="text-xs uppercase tracking-[4px] font-semibold text-neutral-400 mb-2 block">
               Seleccionar testimonio
@@ -131,14 +209,27 @@ const Reviews = () => {
                         {item.role}
                       </span>
                     </div>
-
-                    <ArrowRight
-                      className={`w-4 h-4 transition-all duration-300 shrink-0 ${
-                        isActive
-                          ? "text-customBlue opacity-100 translate-x-0"
-                          : "text-neutral-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
-                      }`}
-                    />
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3 h-3 ${
+                              i < item.rating
+                                ? "text-amber-400 fill-amber-400"
+                                : "text-neutral-200"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <ArrowRight
+                        className={`w-4 h-4 transition-all duration-300 shrink-0 ${
+                          isActive
+                            ? "text-customBlue opacity-100 translate-x-0"
+                            : "text-neutral-300 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+                        }`}
+                      />
+                    </div>
                   </div>
                   <p className="text-xs text-customDarkerGray/80 line-clamp-2 mt-3 font-light leading-relaxed">
                     “{item.text}”
