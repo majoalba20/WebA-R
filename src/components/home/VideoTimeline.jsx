@@ -124,7 +124,7 @@ const VideoTimeline = () => {
                 muted={isMuted}
                 loop
                 playsInline
-                preload="auto"
+                preload="none"
                 className="w-full h-[450px] sm:h-[580px] object-cover filter contrast-[1.03] transition-transform duration-1000 group-hover:scale-[1.02]"
               >
                 <source src="/videos/timeline.mp4" type="video/mp4" />

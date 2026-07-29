@@ -120,6 +120,7 @@ export default function BeforeAfter() {
             <img
               src={activeProject.afterImg}
               alt="Resultado Después"
+              loading='lazy'
               className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
             />
           </div>
@@ -142,6 +143,7 @@ export default function BeforeAfter() {
               <img
                 src={activeProject.beforeImg}
                 alt="Resultado Antes"
+                loading='lazy'
                 className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
               />
             </div>

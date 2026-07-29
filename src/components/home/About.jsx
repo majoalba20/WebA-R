@@ -41,6 +41,7 @@ const About = () => {
               <img
                 src={teamImage}
                 alt="Equipo A+R Arquitectos"
+                loading="lazy"
                 className="w-full h-[480px] sm:h-[600px] object-cover filter grayscale contrast-[1.05] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
               />
             </div>
@@ -97,6 +98,7 @@ const About = () => {
               <img
                 src={davidImage}
                 alt="David Rueda"
+                loading="lazy"
                 className="w-full h-[520px] sm:h-[580px] object-cover object-center filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
               />
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 border border-neutral-200/50">
@@ -125,6 +127,7 @@ const About = () => {
               <img
                 src={jessicaImage}
                 alt="Jessica Alba"
+                loading="lazy"
                 className="w-full h-[520px] sm:h-[580px] object-cover object-bottom filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
               />
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 border border-neutral-200/50">

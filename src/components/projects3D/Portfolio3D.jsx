@@ -55,6 +55,7 @@ export default function Portfolio3D() {
                 <img
                   src={project.image}
                   alt={project.title}
+                  loading='lazy'
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter contrast-[1.02]"
                 />                    
                 {/* Overlay en Hover */}

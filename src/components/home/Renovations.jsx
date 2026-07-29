@@ -92,6 +92,7 @@ function Modal({ project, onClose }) {
               key={currentImage} // Obliga a React a refrescar la transición de la imagen
               src={currentImage}
               alt={`${project.title} - ${index + 1}`}
+              loading='lazy'
               onLoad={() => setIsLoaded(true)}
               className={`max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-all duration-500 ${
                 isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
@@ -208,6 +209,7 @@ export default function Renovations() {
                 <img
                   src={project.image}
                   alt={project.title}
+                  loading='lazy'
                   className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
                 />
                 {/* Overlays Progresivos */}
