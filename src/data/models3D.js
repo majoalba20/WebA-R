@@ -1,16 +1,10 @@
-import edwin from "../assets/models/project_edwin.png";
-import cabin from "../assets/models/project_cabin.png";
-import av_zero from "../assets/models/project_av_zero.png";
-import pamplona from "../assets/models/project_pamplona.png";
-import street_8 from "../assets/models/project_street_8.png";
-
 export const PROJECTS = [
   {
     id: 1,
     title: "Residencia Aura",
     category: "Residencial",
     location: "Madrid, España",
-    image: edwin,
+    image: "/images/models/project_edwin.png",
     glbUrl: "/models/project_edwin.glb",
   },
   {
@@ -18,7 +12,7 @@ export const PROJECTS = [
     title: "Torre Prisma",
     category: "Corporativo",
     location: "Ciudad de México",
-    image: street_8,
+    image: "/images/models/project_street_8.png",
     glbUrl: "/models/project_street_8.glb",
   },
   {
@@ -26,7 +20,7 @@ export const PROJECTS = [
     title: "Torre Prisma",
     category: "Corporativo",
     location: "Ciudad de México",
-    image: pamplona,
+    image: "/images/models/project_pamplona.png",
     glbUrl: "/models/project_pamplona.glb",
   },
   {
@@ -34,7 +28,7 @@ export const PROJECTS = [
     title: "Torre Prisma",
     category: "Corporativo",
     location: "Ciudad de México",
-    image: av_zero,
+    image: "/images/models/project_av_zero.png",
     glbUrl: "/models/project_av_zero.glb",
   },
   {
@@ -42,7 +36,7 @@ export const PROJECTS = [
     title: "Torre Prisma",
     category: "Corporativo",
     location: "Ciudad de México",
-    image: cabin,
+    image: "/images/models/project_cabin.png",
     glbUrl: "/models/project_cabin.glb",
   },
   {

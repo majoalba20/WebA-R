@@ -1,5 +1,5 @@
 import React from 'react';
-import banner from './../../assets/banner/house_desing_day_banner.jpeg';
+import banner from './../../assets/banner/house_desing_day_banner.webp';
 
 function Banner() {
     const handleScrollToContent = () => {
@@ -16,8 +16,10 @@ function Banner() {
             {/* Imagen de Fondo con Tratamiento Visual */}
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <img 
-                src={banner} 
+                //src={banner} 
                 alt="Diseño de Interiores y Arquitectura" 
+                fetchPriority="high" 
+                loading="eager"
                 className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-90 scale-105 animate-pulse-slow" 
                 />
                 
@@ -35,8 +37,12 @@ function Banner() {
                 </span>
                 </div>
                 {/* Titular Principal */}
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light text-white leading-[1.15] tracking-tight max-w-4xl mb-8">
-                Convertimos tus ideas en <span className="font-normal italic text-neutral-200">espacios únicos</span>, combinando diseño, funcionalidad y detalle.
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light text-white leading-tight max-w-4xl mb-8">
+                    Convertimos tus ideas en{" "}
+                    <span className="font-normal italic text-neutral-200">
+                        espacios únicos
+                    </span>
+                    , combinando diseño, funcionalidad y detalle.
                 </h1>
                 {/* Botones de Acción (CTA) */}
                 <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto">

@@ -1,16 +1,10 @@
-import React, { useState, Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Stage, Center, ContactShadows } from '@react-three/drei';
-import { Search, X, RotateCw, Box, Layers } from 'lucide-react';
-import { PROJECTS } from '../../data/models3D.js'
+import React, { useState, lazy, Suspense } from 'react';
+// 1. Quitamos las importaciones de @react-three/fiber y @react-three/drei de aquí
+import { Search, X, Box, Layers } from 'lucide-react';
+import { PROJECTS } from '../../data/models3D.js';
 
-// Componente para cargar el modelo GLB
-function Model({ url }) {
-  const { scene } = useGLTF(url);
-  return <primitive object={scene} />;
-}
-
-useGLTF.preload = (url) => useGLTF.preload(url);
+// 2. Cargamos Viewer3D dinámicamente con lazy()
+const Viewer3D = lazy(() => import('./Viewer3D.jsx'));
 
 export default function Portfolio3D() {
   const [selectedProject, setSelectedProject] = useState(null);
@@ -42,6 +36,7 @@ export default function Portfolio3D() {
             </p>
           </div>
         </div>
+
         {/* Grid de Proyectos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {PROJECTS.map((project) => (
@@ -55,7 +50,7 @@ export default function Portfolio3D() {
                 <img
                   src={project.image}
                   alt={project.title}
-                  loading='lazy'
+                  loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter contrast-[1.02]"
                 />                    
                 {/* Overlay en Hover */}
@@ -86,6 +81,7 @@ export default function Portfolio3D() {
             </div>
           ))}
         </div>
+
         {/* Footer de Sección */}
         <div className="mt-12 pt-8 border-t border-neutral-100 flex items-center justify-between text-xs text-customDarkerGray font-light">
           <span className="flex items-center gap-2">
@@ -97,11 +93,12 @@ export default function Portfolio3D() {
           </span>
         </div>
       </div>
-      {/* Modal Visor 3D Interactivo (FONDO OSCURO RESTAURADO PARA EL MODELO) */}
+
+      {/* Modal Visor 3D Interactivo */}
       {selectedProject && (
         <div className="fixed inset-0 z-50 bg-customBlack/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 lg:p-8 animate-fadeIn">
-          <div className="relative w-full max-w-5xl h-[85vh] bg-customBlack rounded-sm border border-neutral-800 flex flex-col overflow-hidden shadow-2xl">           
-            {/* Cabecera del Modal (Minimalista / Dark) */}
+          <div className="relative w-full max-w-5xl h-[85vh] bg-customBlack rounded-sm border border-neutral-800 flex flex-col overflow-hidden shadow-2xl"> 
+            
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-800 bg-customBlack">
               <div>
                 <span className="text-[10px] uppercase tracking-[2px] text-customBlue font-semibold block">
@@ -119,34 +116,16 @@ export default function Portfolio3D() {
                 <X className="w-5 h-5" />
               </button>
             </div>
-            {/* Canvas de Three.js sobre customBlack */}
-            <div className="relative flex-1 bg-customBlack">
-              <Canvas shadows camera={{ position: [5, 5, 5], fov: 45 }}>
-                <ambientLight intensity={0.7} />
-                <directionalLight position={[10, 12, 8]} intensity={1.8} castShadow />
-                <Suspense fallback={null}>
-                  <Stage environment="city" intensity={0.5} adjustCamera={1.2}>
-                    <Center>
-                      <Model url={selectedProject.glbUrl} />
-                    </Center>
-                  </Stage>
-                  <ContactShadows position={[0, -0.01, 0]} opacity={0.6} scale={10} blur={2} far={4} />
-                </Suspense>
-                <OrbitControls 
-                  enablePan={true} 
-                  enableZoom={true} 
-                  autoRotate={true}
-                  autoRotateSpeed={0.8}
-                  minPolarAngle={0}
-                  maxPolarAngle={Math.PI / 2 + 0.1}
-                />
-              </Canvas>
-              {/* Guía de Control para el Usuario */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/60 text-neutral-200 px-5 py-2.5 rounded-full text-xs flex items-center gap-2.5 shadow-2xl pointer-events-none">
-                <RotateCw className="w-3.5 h-3.5 animate-spin text-customBlue" />
-                <span className="font-light tracking-wide">Arrastra para girar | Scroll para zoom</span>
+
+            {/* Carga dinámica del canvas 3D solo cuando el modal está abierto */}
+            <Suspense fallback={
+              <div className="flex-1 flex items-center justify-center text-white text-sm font-light">
+                Cargando entorno 3D...
               </div>
-            </div>
+            }>
+              <Viewer3D glbUrl={selectedProject.glbUrl} />
+            </Suspense>
+
           </div>
         </div>
       )}

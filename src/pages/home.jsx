@@ -1,4 +1,5 @@
 import "../App.css"
+import { lazy, Suspense } from 'react';
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Banner from "../components/home/Banner";
@@ -7,8 +8,9 @@ import Renovations from "../components/home/Renovations";
 import About from "../components/home/About";
 import Reviews from "../components/home/Reviews";
 import Videos from "../components/home/VideoTimeline";
-import Portafolio3D from "../components/projects3D/Portfolio3D";
 import WhatsAppButton from "../components/home/WhatsAppButton";
+
+const Portfolio3D = lazy(() => import('../components/projects3D/Portfolio3D'));
 
 function Home() {
   return (
@@ -18,7 +20,9 @@ function Home() {
         <Banner/>
         <BeforeAfter/>
         <Renovations/>
-        <Portafolio3D/>
+        <Suspense fallback={<div className="py-12 text-center text-gray-400">Cargando modelos 3D...</div>}>
+          <Portfolio3D />
+        </Suspense>
         <Videos/>
         <About/>
         <Reviews/>

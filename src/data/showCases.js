@@ -1,4 +1,4 @@
-import beforeKitchen1 from "../assets/beforeAndAfter/before_kitchen1.jpeg";
+import beforeKitchen1 from "../assets/beforeAndAfter/before_kitchen1.webp";
 import afterKitchen1 from "../assets/renovations/kitchens/kitchen1.jpeg";
 import beforeKitchen6 from "../assets/beforeAndAfter/before_kitchen6.jpeg";
 import afterKitchen6 from "../assets/beforeAndAfter/after_kitchen6.jpeg";

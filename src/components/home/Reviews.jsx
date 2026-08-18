@@ -48,9 +48,7 @@ const Reviews = () => {
         URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSKypGYSbJB6MUyUPwEOSIdfaNPHu-Nv_pPbrf88SGYeOXaK90Xl32GFbXzKS3RyI_bJR0bzakKBmC4/pub?output=csv"
         const response = await fetch(URL);
         const csvText = await response.text();
-        console.log(csvText)
         const parsedRows = parseCSV(csvText);
-        console.log(parsedRows)
         if (parsedRows.length <= 1) {
           setLoading(false);
           return;
@@ -76,7 +74,6 @@ const Reviews = () => {
             rating: isNaN(ratingNumber) ? 5 : Math.min(Math.max(ratingNumber, 1), 5),
           };
         });
-        console.log(dataRows)
         // FILTRO AUTOMÁTICO: Solo reseñas con 4 o 5 estrellas y con comentario no vacío
         const topReviews = dataRows.filter((item) => item.rating >= 4 && item.text.length > 0);
         setReviews(topReviews);
