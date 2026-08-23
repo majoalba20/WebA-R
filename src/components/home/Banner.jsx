@@ -16,7 +16,7 @@ function Banner() {
             {/* Imagen de Fondo con Tratamiento Visual */}
             <div className="absolute inset-0 z-0 overflow-hidden">
                 <img 
-                //src={banner} 
+                src={banner} 
                 alt="Diseño de Interiores y Arquitectura" 
                 fetchPriority="high" 
                 loading="eager"

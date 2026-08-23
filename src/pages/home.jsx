@@ -20,7 +20,7 @@ function Home() {
         <Banner/>
         <BeforeAfter/>
         <Renovations/>
-        <Suspense fallback={<div className="py-12 text-center text-gray-400">Cargando modelos 3D...</div>}>
+        <Suspense fallback={<div className="py-12 text-center text-gray-400 text-sm font-light">Cargando experiencia 3D...</div>}>
           <Portfolio3D />
         </Suspense>
         <Videos/>

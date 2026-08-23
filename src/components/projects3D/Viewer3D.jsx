@@ -1,40 +1,59 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF, Stage, Center, ContactShadows } from '@react-three/drei';
-import { RotateCw } from 'lucide-react';
+import { OrbitControls, useGLTF, Bounds, Center, Html } from '@react-three/drei';
 
+// Componente para cargar el modelo con validación de URL
 function Model({ url }) {
+    if (!url) return null;
     const { scene } = useGLTF(url);
     return <primitive object={scene} />;
 }
 
-export default function Viewer3D({ glbUrl }) {
+function Loader() {
     return (
-        <div className="relative flex-1 bg-customBlack h-full w-full">
-        <Canvas shadows camera={{ position: [5, 5, 5], fov: 45 }}>
-            <ambientLight intensity={0.7} />
-            <directionalLight position={[10, 12, 8]} intensity={1.8} castShadow />
-            <Suspense fallback={null}>
-            <Stage environment="city" intensity={0.5} adjustCamera={1.2}>
+        <Html center>
+        <div className="flex flex-col items-center justify-center bg-customBlack/80 text-white px-4 py-2 rounded-lg backdrop-blur-sm">
+            <div className="w-6 h-6 border-2 border-customBlue border-t-transparent rounded-full animate-spin mb-2"></div>
+            <span className="text-xs font-montserrat">Cargando modelo 3D...</span>
+        </div>
+        </Html>
+    );
+}
+
+export default function Viewer3D({ modelUrl }) {
+    // Si la propiedad modelUrl no ha cargado aún o viene vacía, mostramos un estado de espera
+    if (!modelUrl) {
+        return (
+        <div className="w-full h-[500px] bg-customGray rounded-2xl flex items-center justify-center">
+            <span className="text-customDarkGray font-montserrat text-sm">Selecciona un proyecto para ver el modelo 3D</span>
+        </div>
+        );
+    }
+    return (
+        <div className="w-full h-[500px] bg-customGray rounded-2xl overflow-hidden relative shadow-inner">
+        <Canvas
+            camera={{ position: [5, 5, 5], fov: 45 }}
+            gl={{ preserveDrawingBuffer: true, antialias: true }}
+        >
+            <ambientLight intensity={0.9} />
+            <directionalLight position={[10, 15, 10]} intensity={1.2} castShadow />
+            <directionalLight position={[-10, -10, -10]} intensity={0.4} />
+            <Suspense fallback={<Loader />}>
+            <Bounds fit clip observe margin={1.2}>
                 <Center>
-                <Model url={glbUrl} />
+                <Model url={modelUrl} />
                 </Center>
-            </Stage>
-            <ContactShadows position={[0, -0.01, 0]} opacity={0.6} scale={10} blur={2} far={4} />
+            </Bounds>
             </Suspense>
-            <OrbitControls 
-            enablePan={true} 
-            enableZoom={true} 
-            autoRotate={true}
-            autoRotateSpeed={0.8}
-            minPolarAngle={0}
+            <OrbitControls
+            makeDefault
+            enableDamping
+            dampingFactor={0.05}
             maxPolarAngle={Math.PI / 2 + 0.1}
+            minDistance={1}
+            maxDistance={50}
             />
         </Canvas>
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-neutral-900/90 backdrop-blur-md border border-neutral-700/60 text-neutral-200 px-5 py-2.5 rounded-full text-xs flex items-center gap-2.5 shadow-2xl pointer-events-none">
-            <RotateCw className="w-3.5 h-3.5 animate-spin text-customBlue" />
-            <span className="font-light tracking-wide">Arrastra para girar | Scroll para zoom</span>
-        </div>
         </div>
     );
 }
