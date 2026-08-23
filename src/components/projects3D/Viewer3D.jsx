@@ -52,7 +52,7 @@ export default function Viewer3D({ modelUrl }) {
             maxPolarAngle={Math.PI / 2 + 0.1}
             minDistance={1}
             maxDistance={50}
-            />
+            /> 
         </Canvas>
         </div>
     );

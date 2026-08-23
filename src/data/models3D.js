@@ -8,14 +8,6 @@ export const PROJECTS = [
     glbUrl: "/models/edwin1_project.glb",
   },
   {
-    id: 2,
-    title: "Residencia Edwin 2",
-    category: "Residencial",
-    location: "Cúcuta, Colombia",
-    image: "/images/models/edwin_project.png",
-    glbUrl: "/models/edwin_project.glb",
-  },
-  {
     id: 3,
     title: "Residencia Jaime",
     category: "Residencial",
@@ -46,14 +38,6 @@ export const PROJECTS = [
     location: "Cúcuta, Colombia",
     image: "/images/models/tania_project.png",
     glbUrl: "/models/tania_project.glb",
-  },
-  {
-    id: 7,
-    title: "Diseño Cabaña",
-    category: "Residencial",
-    location: "Pamplona, Colombia",
-    image: "/images/models/cabaña.png",
-    glbUrl: "/models/cabaña.glb",
   },
   {
     id: 8,
