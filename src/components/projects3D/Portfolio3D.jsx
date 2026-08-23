@@ -1,4 +1,4 @@
-import React, { useState, lazy, Suspense } from 'react';
+import React, { useState, lazy, Suspense, useRef, useEffect } from 'react';
 import { Box, Layers, CheckCircle2 } from 'lucide-react';
 import { PROJECTS } from '../../data/models3D.js';
 
@@ -7,8 +7,34 @@ const Viewer3D = lazy(() => import('./Viewer3D.jsx'));
 
 export default function Portfolio3D() {
   const [activeProject, setActiveProject] = useState(PROJECTS[0]);
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef(null);
+
+  // Observa cuándo la sección entra al viewport antes de montar el motor 3D
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect(); // Desconecta el observer una vez activado
+        }
+      },
+      { rootMargin: '200px' } // Comienza la carga 200px antes de llegar a la vista
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="portfolio-3d" className="relative bg-white pt-12 pb-16 font-montserrat select-none">
+    <section 
+      ref={sectionRef} 
+      id="portfolio-3d" 
+      className="relative bg-white pt-12 pb-16 font-montserrat select-none"
+    >
       <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">
         
         {/* Encabezado */}
@@ -33,13 +59,21 @@ export default function Portfolio3D() {
           
           {/* Contenedor del Modelo 3D (8 columnas) */}
           <div className="lg:col-span-8 w-full">
-            <Suspense fallback={
+            {isVisible ? (
+              <Suspense 
+                fallback={
+                  <div className="w-full h-[480px] bg-neutral-900 rounded-lg flex items-center justify-center text-neutral-400 text-sm font-light animate-pulse">
+                    Cargando entorno 3D...
+                  </div>
+                }
+              >
+                <Viewer3D modelUrl={activeProject.glbUrl} />
+              </Suspense>
+            ) : (
               <div className="w-full h-[480px] bg-neutral-900 rounded-lg flex items-center justify-center text-neutral-400 text-sm font-light">
-                Cargando entorno 3D...
+                Preparando visor 3D...
               </div>
-            }>
-              <Viewer3D modelUrl={activeProject.glbUrl} />
-            </Suspense>
+            )}
           </div>
           {/* Panel Lateral con Detalle del Proyecto (4 columnas) */}
           <div className="lg:col-span-4 bg-neutral-50 p-6 md:p-8 rounded-lg border border-neutral-100 flex flex-col justify-between h-full min-h-[480px]">
@@ -99,6 +133,8 @@ export default function Portfolio3D() {
                       src={project.image}
                       alt={project.title}
                       loading="lazy"
+                      width="300"
+                      height="200"
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                     {isActive && (
