@@ -1,7 +1,7 @@
 export const PROJECTS = [
   {
     id: 1,
-    title: "Residencia Edwin 1",
+    title: "Residencia E1",
     category: "Residencial",
     location: "Cúcuta, Colombia",
     image: "/images/models/edwin1_project.png",
@@ -9,7 +9,7 @@ export const PROJECTS = [
   },
   {
     id: 3,
-    title: "Residencia Jaime",
+    title: "Remodelación J21",
     category: "Residencial",
     location: "Bogotá, Colombia",
     image: "/images/models/jaime_project.jpeg",
@@ -17,7 +17,7 @@ export const PROJECTS = [
   },
   {
     id: 4,
-    title: "Residencia Jeff",
+    title: "Remodelación MP",
     category: "Residencial",
     location: "Cúcuta, Colombia",
     image: "/images/models/jeff_project.jpeg",
@@ -25,24 +25,24 @@ export const PROJECTS = [
   },
   {
     id: 5,
-    title: "Residencia Sebastian",
-    category: "Corporativo",
+    title: "Remodelación S-LU",
+    category: "Residencial",
     location: "Cúcuta, Colombia",
     image: "/images/models/seb_project.jpeg",
     glbUrl: "/models/seb_project.glb",
   },
   {
     id: 6,
-    title: "Residencia Tania",
+    title: "Remodelación TA",
     category: "Residencial",
-    location: "Cúcuta, Colombia",
+    location: "Bogotá, Colombia",
     image: "/images/models/tania_project.png",
     glbUrl: "/models/tania_project.glb",
   },
   {
     id: 8,
-    title: "Local Calle 8a",
-    category: "Corporativo",
+    title: "Diseño 8A",
+    category: "Residencial",
     location: "Cúcuta, Colombia",
     image: "/images/models/calle_8a.png",
     glbUrl: "/models/calle_8a.glb",
