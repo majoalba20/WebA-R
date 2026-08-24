@@ -21,11 +21,15 @@ function Loader() {
 }
 
 export default function Viewer3D({ modelUrl }) {
-    // Si la propiedad modelUrl no ha cargado aún o viene vacía, mostramos un estado de espera
+  // Detectar si el usuario está en un dispositivo móvil/tablet
+    const isMobile = typeof window !== 'undefined' && /Android|iPhone|iPad/i.test(navigator.userAgent);
+    // Si la propiedad modelUrl no ha cargado aún o viene vacía
     if (!modelUrl) {
         return (
         <div className="w-full h-[500px] bg-customGray rounded-2xl flex items-center justify-center">
-            <span className="text-customDarkGray font-montserrat text-sm">Selecciona un proyecto para ver el modelo 3D</span>
+            <span className="text-customDarkGray font-montserrat text-sm">
+            Selecciona un proyecto para ver el modelo 3D
+            </span>
         </div>
         );
     }
@@ -33,10 +37,23 @@ export default function Viewer3D({ modelUrl }) {
         <div className="w-full h-[500px] bg-customGray rounded-2xl overflow-hidden relative shadow-inner">
         <Canvas
             camera={{ position: [5, 5, 5], fov: 45 }}
-            gl={{ preserveDrawingBuffer: true, antialias: true }}
+            // 1. Limita la resolución máxima en móviles/tablets a 1.5x (evita renderizar en 2K/3K)
+            dpr={[1, Math.min(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1.5)]}
+            // 2. Reduce la carga del renderizador WebGL
+            performance={{ min: 0.5 }}
+            gl={{ 
+            preserveDrawingBuffer: true, 
+            antialias: !isMobile, // Desactiva antialias en móviles para ganar bastante fluidez
+            powerPreference: "high-performance"
+            }}
         >
             <ambientLight intensity={0.9} />
-            <directionalLight position={[10, 15, 10]} intensity={1.2} castShadow />
+            {/* 3. Las sombras proyectadas solo se activan en computadores */}
+            <directionalLight 
+            position={[10, 15, 10]} 
+            intensity={1.2} 
+            castShadow={!isMobile} 
+            />
             <directionalLight position={[-10, -10, -10]} intensity={0.4} />
             <Suspense fallback={<Loader />}>
             <Bounds fit clip observe margin={1.2}>
