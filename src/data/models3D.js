@@ -19,7 +19,7 @@ export const PROJECTS = [
     id: 4,
     title: "Remodelación MP",
     category: "Residencial",
-    location: "Cúcuta, Colombia",
+    location: "Pamplona, Colombia",
     image: "/images/models/jeff_project.jpeg",
     glbUrl: "/models/jeff_project.glb",
   },
