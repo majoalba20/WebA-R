@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react';
-// Importamos la constante con las imágenes importadas desde src/assets/renovations/
 import { RENOVATIONS_DATA } from '../../data/renovations.js';
 
-// --- MODAL PREMIUM CON FLUIDEZ DE IMAGEN Y PRECARGA ---
+// Helper para detectar si un recurso es video
+const isVideo = (url) => {
+  if (!url) return false;
+  return /\.(mp4|webm|ogg|mov)$/i.test(url);
+};
+
+// --- MODAL PREMIUM CON SOPORTE PARA IMÁGENES Y VIDEOS ---
 function Modal({ project, onClose }) {
   const [index, setIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Garantizar array de imágenes estables
   const projectImages = project?.images && project.images.length > 0 
     ? project.images 
     : (project?.image ? [project.image] : []);
 
-  // Pre-cargar imágenes vecinas para que el cambio sea ultra fluido
+  // Pre-cargar solo si el elemento vecino es una imagen
   useEffect(() => {
     if (!projectImages.length) return;
 
-    // Pre-cargar siguiente imagen
     const nextIdx = (index + 1) % projectImages.length;
-    const nextImg = new Image();
-    nextImg.src = projectImages[nextIdx];
+    const nextSrc = projectImages[nextIdx];
+    if (!isVideo(nextSrc)) {
+      const nextImg = new Image();
+      nextImg.src = nextSrc;
+    }
 
-    // Pre-cargar imagen anterior
     const prevIdx = (index - 1 + projectImages.length) % projectImages.length;
-    const prevImg = new Image();
-    prevImg.src = projectImages[prevIdx];
+    const prevSrc = projectImages[prevIdx];
+    if (!isVideo(prevSrc)) {
+      const prevImg = new Image();
+      prevImg.src = prevSrc;
+    }
   }, [index, projectImages]);
 
-  // Manejo de teclas (Esc para cerrar, flechas para navegar)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') onClose();
@@ -41,7 +48,8 @@ function Modal({ project, onClose }) {
 
   if (!project) return null;
 
-  const currentImage = projectImages[index];
+  const currentMedia = projectImages[index];
+  const currentIsVideo = isVideo(currentMedia);
 
   const handleNextImage = () => {
     setIsLoaded(false);
@@ -77,35 +85,52 @@ function Modal({ project, onClose }) {
             </svg>
           </button>
         </div>
-        {/* Visor de Galería: Fondo Difuminado Premium */}
-        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-hidden">    
-          {/* Fondo Atmosférico (Replica la imagen con desenfoque suave) */}
-          <div 
-            className="absolute inset-0 bg-cover bg-center blur-3xl opacity-30 scale-125 transition-all duration-500 ease-out pointer-events-none"
-            style={{ backgroundImage: `url(${currentImage})` }}
-          />       
-          {/* Capa de contraste sofisticado */}
-          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />          
-          {/* Contenedor de Imagen Central */}
-          <div className="relative z-10 w-full h-full flex items-center justify-center max-h-[60vh]">
-            <img
-              key={currentImage} // Obliga a React a refrescar la transición de la imagen
-              src={currentImage}
-              alt={`${project.title} - ${index + 1}`}
-              loading='lazy'
-              onLoad={() => setIsLoaded(true)}
-              className={`max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-all duration-500 ${
-                isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-              }`}
+        {/* Visor de Galería */}
+        <div className="relative flex-1 bg-neutral-950 flex items-center justify-center p-4 md:p-8 min-h-[350px] overflow-hidden">     
+          {/* Fondo Atmosférico (Si es video no renderizamos background-image) */}
+          {!currentIsVideo && (
+            <div 
+              className="absolute inset-0 bg-cover bg-center blur-3xl opacity-30 scale-125 transition-all duration-500 ease-out pointer-events-none"
+              style={{ backgroundImage: `url(${currentMedia})` }}
             />
+          )}               
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/60 via-transparent to-neutral-950/80 pointer-events-none" />                    
+          {/* Contenedor Multimedia Central */}
+          <div className="relative z-10 w-full h-full flex items-center justify-center max-h-[60vh]">
+            {currentIsVideo ? (
+              <video
+                key={currentMedia}
+                src={currentMedia}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                onLoadedData={() => setIsLoaded(true)}
+                className={`max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto rounded-sm shadow-2xl transition-all duration-500 ${
+                  isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              />
+            ) : (
+              <img
+                key={currentMedia}
+                src={currentMedia}
+                alt={`${project.title} - ${index + 1}`}
+                loading='lazy'
+                onLoad={() => setIsLoaded(true)}
+                className={`max-w-full max-h-[60vh] w-auto h-auto object-contain block mx-auto select-none rounded-sm shadow-2xl transition-all duration-500 ${
+                  isLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              />
+            )}
           </div>
-          {/* Flechas de Navegación Flotantes */}
+          {/* Flechas de Navegación */}
           {projectImages.length > 1 && (
             <>
               <button
                 onClick={handlePreviousImage}
                 className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-neutral-900/60 hover:bg-white text-white hover:text-customBlack border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-300 shadow-2xl z-20"
-                aria-label="Imagen anterior"
+                aria-label="Anterior"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 19l-7-7 7-7" />
@@ -114,7 +139,7 @@ function Modal({ project, onClose }) {
               <button
                 onClick={handleNextImage}
                 className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 rounded-full bg-neutral-900/60 hover:bg-white text-white hover:text-customBlack border border-white/20 backdrop-blur-md flex items-center justify-center transition-all duration-300 shadow-2xl z-20"
-                aria-label="Siguiente imagen"
+                aria-label="Siguiente"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 5l7 7-7 7" />
@@ -131,7 +156,6 @@ function Modal({ project, onClose }) {
         </div>
         {/* Info & Detalles Inferiores */}
         <div className="p-5 md:p-6 bg-white border-t border-neutral-100 overflow-y-auto shrink-0 z-20">
-          {/* Indicadores de Galería */}
           {projectImages.length > 1 && (
             <div className="flex items-center gap-2 mb-3">
               {projectImages.map((_, i) => (
@@ -144,7 +168,7 @@ function Modal({ project, onClose }) {
                   className={`h-1.5 transition-all duration-300 rounded-full ${
                     i === index ? 'w-8 bg-customBlue' : 'w-2 bg-neutral-200 hover:bg-neutral-300'
                   }`}
-                  aria-label={`Ver imagen ${i + 1}`}
+                  aria-label={`Ver elemento ${i + 1}`}
                 />
               ))}
             </div>
@@ -171,12 +195,10 @@ export default function Renovations() {
       id="renovations"
       className="relative bg-white pt-10 md:pt-14 pb-10 md:pb-14 font-montserrat overflow-hidden select-none scroll-mt-20 sm:scroll-mt-24"
     >
-      {/* Tipografía Decorativa de Fondo */}
       <div className="absolute top-1/4 -left-12 text-[18vw] font-extralight text-neutral-100/80 leading-none pointer-events-none select-none z-0">
         REFORMAS
       </div>
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-16">     
-        {/* Encabezado Editorial */}
         <div className="mb-14 md:mb-16 border-b border-neutral-100 pb-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="w-10 h-[2px] bg-customBlue"></span>
@@ -197,6 +219,7 @@ export default function Renovations() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[280px] md:auto-rows-[320px]">
           {RENOVATIONS_DATA.map((project, index) => {
             const isLarge = index === 0;
+            const projectIsVideo = isVideo(project.image);
             return (
               <div
                 key={project.id || index}
@@ -205,21 +228,29 @@ export default function Renovations() {
                   isLarge ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'
                 }`}
               >
-                {/* Imagen del Proyecto en Grid */}
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  loading='lazy'
-                  className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
-                />
-                {/* Overlays Progresivos */}
+                {/* Visualización en la Tarjeta (Video o Imagen) */}
+                {projectIsVideo ? (
+                  <video
+                    src={project.image}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100 pointer-events-none"
+                  />
+                ) : (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    loading='lazy'
+                    className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
+                  />
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />                
-                {/* Info Flotante */}
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                   
-                  {/* Badge Superior */}
                   <div className="flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="text-[10px] uppercase tracking-[3px] text-white/90 bg-customBlack/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                      Explorar Galería
+                      {projectIsVideo ? 'Ver Video' : 'Explorar Galería'}
                     </span>
                     <div className="w-8 h-8 rounded-full bg-white text-customBlack flex items-center justify-center transform translate-x-2 group-hover:translate-x-0 transition-transform duration-300 shadow-md">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -227,7 +258,6 @@ export default function Renovations() {
                       </svg>
                     </div>
                   </div>
-                  {/* Textos */}
                   <div>
                     <span className="text-xs font-semibold uppercase tracking-[2px] text-customBlue block mb-1">
                       {project.category || 'Remodelación'}
@@ -245,7 +275,6 @@ export default function Renovations() {
           })}
         </div>
       </div>
-      {/* Modal Integrado - Pasamos key para forzar la reinicialización del estado 'index' a 0 */}
       {selectedProject && (
         <Modal 
           key={selectedProject.id || selectedProject.title} 

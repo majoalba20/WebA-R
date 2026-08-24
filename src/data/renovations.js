@@ -62,7 +62,8 @@ export const RENOVATIONS_DATA = [
         image: garden1,
         description: "Propuestas únicas para espacios al aire libre con personalidad.",
         images: [
-            garden1
+            garden1,
+            '/videos/garden.mp4'
         ]
     }
 ];
