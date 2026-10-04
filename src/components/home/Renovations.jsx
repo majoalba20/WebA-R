@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { RENOVATIONS_DATA } from '../../data/renovations.js';
+import { getRenovationsData } from '../../services/driveService.js';
 
 // Helper para detectar si un recurso es video
 const isVideo = (url) => {
@@ -189,7 +190,21 @@ function Modal({ project, onClose }) {
 
 // --- COMPONENTE PRINCIPAL RENOVATIONS ---
 export default function Renovations() {
+  const [projects, setProjects] = useState(RENOVATIONS_DATA);
   const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    getRenovationsData().then((data) => {
+      if (isMounted && data && data.length > 0) {
+        setProjects(data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <section
       id="renovations"
@@ -217,7 +232,7 @@ export default function Renovations() {
         </div>
         {/* Bento Grid Pro */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 auto-rows-[280px] md:auto-rows-[320px]">
-          {RENOVATIONS_DATA.map((project, index) => {
+          {projects.map((project, index) => {
             const isLarge = index === 0;
             const projectIsVideo = isVideo(project.image);
             return (
@@ -228,23 +243,30 @@ export default function Renovations() {
                   isLarge ? 'md:col-span-2 md:row-span-2' : 'col-span-1 row-span-1'
                 }`}
               >
-                {/* Visualización en la Tarjeta (Video o Imagen) */}
-                {projectIsVideo ? (
-                  <video
-                    src={project.image}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100 pointer-events-none"
-                  />
+                {/* Visualización en la Tarjeta (Video o Imagen o Placeholder) */}
+                {project.image ? (
+                  projectIsVideo ? (
+                    <video
+                      src={project.image}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100 pointer-events-none"
+                    />
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      loading='lazy'
+                      className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
+                    />
+                  )
                 ) : (
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    loading='lazy'
-                    className="w-full h-full object-cover object-center filter contrast-[1.03] grayscale group-hover:grayscale-0 scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-90 group-hover:opacity-100"
-                  />
+                  <div className="w-full h-full bg-neutral-800 animate-pulse flex flex-col items-center justify-center text-neutral-400 gap-2">
+                    <div className="w-6 h-6 border-2 border-customBlue border-t-transparent rounded-full animate-spin" />
+                    <span className="text-[11px] uppercase tracking-wider font-light">Cargando desde Drive...</span>
+                  </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-customBlack/90 via-customBlack/20 to-transparent opacity-80 group-hover:opacity-70 transition-opacity duration-500" />                
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-between z-10">                   

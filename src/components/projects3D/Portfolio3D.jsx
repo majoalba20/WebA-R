@@ -1,14 +1,29 @@
 import React, { useState, lazy, Suspense, useRef, useEffect } from 'react';
 import { Box, Layers, CheckCircle2 } from 'lucide-react';
 import { PROJECTS } from '../../data/models3D.js';
+import { getProjects3DData } from '../../services/driveService.js';
 
 // Cargamos el Viewer3D liviano solo bajo demanda
 const Viewer3D = lazy(() => import('./Viewer3D.jsx'));
 
 export default function Portfolio3D() {
+  const [projects, setProjects] = useState(PROJECTS);
   const [activeProject, setActiveProject] = useState(PROJECTS[0]);
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    getProjects3DData().then((data) => {
+      if (isMounted && data && data.length > 0) {
+        setProjects(data);
+        setActiveProject((prev) => data.find((p) => p.id === prev?.id) || data[0]);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Observa cuándo la sección entra al viewport antes de montar el motor 3D
   useEffect(() => {
@@ -116,7 +131,7 @@ export default function Portfolio3D() {
             Catálogo de Obras
           </h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-            {PROJECTS.map((project) => {
+            {projects.map((project) => {
               const isActive = activeProject.id === project.id;
               return (
                 <button

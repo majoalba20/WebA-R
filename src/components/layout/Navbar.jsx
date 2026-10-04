@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import logo from './../../assets/utils/logo2-removebg.png';
 import { SITE_CONFIG, NAVIGATION_LINKS } from '../../constants/siteConfig';
+
+const logo = '/logo.png';
 
 function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);

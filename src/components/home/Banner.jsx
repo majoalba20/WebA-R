@@ -1,7 +1,21 @@
-import React from 'react';
-import banner from './../../assets/banner/house_desing_day_banner.webp';
+import React, { useState, useEffect } from 'react';
+import { getBannerImage } from '../../services/driveService.js';
 
 function Banner() {
+    const [bannerSrc, setBannerSrc] = useState('');
+
+    useEffect(() => {
+        let isMounted = true;
+        getBannerImage('').then((img) => {
+            if (isMounted && img) {
+                setBannerSrc(img);
+            }
+        });
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
     const handleScrollToContent = () => {
         const nextSection = document.getElementById('beforeAndAfter') || document.getElementById('renovations');
         if (nextSection) {
@@ -14,14 +28,18 @@ function Banner() {
             className="relative w-full h-screen overflow-hidden font-montserrat select-none bg-neutral-950"
             >
             {/* Imagen de Fondo con Tratamiento Visual */}
-            <div className="absolute inset-0 z-0 overflow-hidden">
-                <img 
-                src={banner} 
-                alt="Diseño de Interiores y Arquitectura" 
-                fetchPriority="high" 
-                loading="eager"
-                className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-90 scale-105 animate-pulse-slow" 
-                />
+            <div className="absolute inset-0 z-0 overflow-hidden bg-neutral-950">
+                {bannerSrc ? (
+                    <img 
+                    src={bannerSrc} 
+                    alt="Diseño de Interiores y Arquitectura" 
+                    fetchPriority="high" 
+                    loading="eager"
+                    className="w-full h-full object-cover object-center filter contrast-[1.05] brightness-90 scale-105 animate-pulse-slow" 
+                    />
+                ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-neutral-900 via-neutral-950 to-black animate-pulse" />
+                )}
                 
                 {/* Gradiante Atmosférico para Legibilidad Impecable */}
                 <div className="absolute inset-0 bg-gradient-to-t from-customBlack via-customBlack/40 to-customBlack/30" />

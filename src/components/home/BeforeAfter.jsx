@@ -1,14 +1,28 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { SHOWCASES } from "../../data/showCases.js";
+import { getShowcasesData } from "../../services/driveService.js";
 
 export default function BeforeAfter() {
+  const [projects, setProjects] = useState(SHOWCASES);
   const [selectedProjectIndex, setSelectedProjectIndex] = useState(0);
   const [position, setPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef(null);
 
-  const activeProject = SHOWCASES && SHOWCASES.length > 0 
-    ? SHOWCASES[selectedProjectIndex] 
+  useEffect(() => {
+    let isMounted = true;
+    getShowcasesData().then((data) => {
+      if (isMounted && data && data.length > 0) {
+        setProjects(data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const activeProject = projects && projects.length > 0 
+    ? (projects[selectedProjectIndex] || projects[0])
     : null;
 
   const handleMove = (clientX) => {
@@ -85,9 +99,9 @@ export default function BeforeAfter() {
           </p>
         </div>
         {/* Selector de Proyectos */}
-        {SHOWCASES.length > 1 && (
+        {projects.length > 1 && (
           <div className="flex items-center gap-3 mb-8 overflow-x-auto pb-2">
-            {SHOWCASES.map((item, idx) => (
+            {projects.map((item, idx) => (
               <button
                 key={item.id || idx}
                 onClick={() => {
@@ -117,12 +131,19 @@ export default function BeforeAfter() {
           />
           {/* CAPA DESPUÉS */}
           <div className="absolute inset-0 flex items-center justify-center p-2 sm:p-4">
-            <img
-              src={activeProject.afterImg}
-              alt="Resultado Después"
-              loading='lazy'
-              className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
-            />
+            {activeProject.afterImg ? (
+              <img
+                src={activeProject.afterImg}
+                alt="Resultado Después"
+                loading='lazy'
+                className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
+              />
+            ) : (
+              <div className="flex flex-col items-center justify-center text-neutral-400 gap-2">
+                <div className="w-8 h-8 rounded-full border-2 border-customBlue border-t-transparent animate-spin" />
+                <span className="text-xs uppercase tracking-widest font-light">Cargando desde Drive...</span>
+              </div>
+            )}
           </div>
           {/* Label DESPUÉS */}
           <div
@@ -140,12 +161,19 @@ export default function BeforeAfter() {
             }}
           >
             <div className="w-full h-full flex items-center justify-center p-2 sm:p-4 bg-neutral-950">
-              <img
-                src={activeProject.beforeImg}
-                alt="Resultado Antes"
-                loading='lazy'
-                className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
-              />
+              {activeProject.beforeImg ? (
+                <img
+                  src={activeProject.beforeImg}
+                  alt="Resultado Antes"
+                  loading='lazy'
+                  className="max-w-full max-h-full w-auto h-auto object-contain object-center drop-shadow-xl"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center text-neutral-400 gap-2">
+                  <div className="w-8 h-8 rounded-full border-2 border-customBlue border-t-transparent animate-spin" />
+                  <span className="text-xs uppercase tracking-widest font-light">Cargando desde Drive...</span>
+                </div>
+              )}
             </div>
             {/* Label ANTES */}
             <div

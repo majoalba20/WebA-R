@@ -1,9 +1,28 @@
-import React from "react";
-import jessicaImage from "../../assets/utils/architect_jessica.jpeg";
-import davidImage from "../../assets/utils/architect_david.jpeg";
-import teamImage from "../../assets/utils/team.jpeg";
+import React, { useState, useEffect } from "react";
+import { getAboutImages } from "../../services/driveService.js";
 
 const About = () => {
+  const [images, setImages] = useState({
+    teamImage: "",
+    davidImage: "",
+    jessicaImage: "",
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    getAboutImages({
+      teamImage: "",
+      davidImage: "",
+      jessicaImage: "",
+    }).then((loadedImages) => {
+      if (isMounted && loadedImages) {
+        setImages(loadedImages);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   return (
     <section
       id="about"
@@ -37,13 +56,20 @@ const About = () => {
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center mb-36">
           {/* Fotografía con Encuadre Arquitectónico */}
           <div className="lg:col-span-7 relative group">
-            <div className="relative z-10 overflow-hidden bg-neutral-100 rounded-sm">
-              <img
-                src={teamImage}
-                alt="Equipo A+R Arquitectos"
-                loading="lazy"
-                className="w-full h-[480px] sm:h-[600px] object-cover filter grayscale contrast-[1.05] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
-              />
+            <div className="relative z-10 overflow-hidden bg-neutral-100 rounded-sm min-h-[480px]">
+              {images.teamImage ? (
+                <img
+                  src={images.teamImage}
+                  alt="Equipo A+R Arquitectos"
+                  loading="lazy"
+                  className="w-full h-[480px] sm:h-[600px] object-cover filter grayscale contrast-[1.05] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
+                />
+              ) : (
+                <div className="w-full h-[480px] sm:h-[600px] bg-neutral-200/80 animate-pulse flex flex-col items-center justify-center text-neutral-400 gap-2">
+                  <div className="w-8 h-8 rounded-full border-2 border-customBlue border-t-transparent animate-spin" />
+                  <span className="text-xs uppercase tracking-widest font-light">Cargando foto de equipo...</span>
+                </div>
+              )}
             </div>
             {/* Marco o Sombra Estructural en Capas */}
             <div className="absolute -bottom-4 -right-4 w-full h-full border border-customBlue/30 z-0 pointer-events-none hidden sm:block transition-transform duration-500 group-hover:translate-x-2 group-hover:translate-y-2"></div>
@@ -94,13 +120,20 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-12 lg:gap-20">
           {/* David Rueda */}
           <div className="group flex flex-col">
-            <div className="relative overflow-hidden bg-neutral-100 rounded-sm mb-8">
-              <img
-                src={davidImage}
-                alt="David Rueda"
-                loading="lazy"
-                className="w-full h-[520px] sm:h-[580px] object-cover object-center filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
-              />
+            <div className="relative overflow-hidden bg-neutral-100 rounded-sm mb-8 min-h-[520px]">
+              {images.davidImage ? (
+                <img
+                  src={images.davidImage}
+                  alt="David Rueda"
+                  loading="lazy"
+                  className="w-full h-[520px] sm:h-[580px] object-cover object-center filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
+                />
+              ) : (
+                <div className="w-full h-[520px] sm:h-[580px] bg-neutral-200/80 animate-pulse flex flex-col items-center justify-center text-neutral-400 gap-2">
+                  <div className="w-8 h-8 rounded-full border-2 border-customBlue border-t-transparent animate-spin" />
+                  <span className="text-xs uppercase tracking-widest font-light">Cargando foto...</span>
+                </div>
+              )}
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 border border-neutral-200/50">
                 <span className="text-[11px] uppercase tracking-[3px] font-semibold text-customBlack">
                   01 / Dirección
@@ -123,13 +156,20 @@ const About = () => {
 
           {/* Jessica Alba */}
           <div className="group flex flex-col">
-            <div className="relative overflow-hidden bg-neutral-100 rounded-sm mb-8">
-              <img
-                src={jessicaImage}
-                alt="Jessica Alba"
-                loading="lazy"
-                className="w-full h-[520px] sm:h-[580px] object-cover object-bottom filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
-              />
+            <div className="relative overflow-hidden bg-neutral-100 rounded-sm mb-8 min-h-[520px]">
+              {images.jessicaImage ? (
+                <img
+                  src={images.jessicaImage}
+                  alt="Jessica Alba"
+                  loading="lazy"
+                  className="w-full h-[520px] sm:h-[580px] object-cover object-bottom filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000 ease-out"
+                />
+              ) : (
+                <div className="w-full h-[520px] sm:h-[580px] bg-neutral-200/80 animate-pulse flex flex-col items-center justify-center text-neutral-400 gap-2">
+                  <div className="w-8 h-8 rounded-full border-2 border-customBlue border-t-transparent animate-spin" />
+                  <span className="text-xs uppercase tracking-widest font-light">Cargando foto...</span>
+                </div>
+              )}
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 border border-neutral-200/50">
                 <span className="text-[11px] uppercase tracking-[3px] font-semibold text-customBlack">
                   02 / Interiorismo
